@@ -6,6 +6,7 @@ public enum AnalyticsType {
 
     TPS,
     PLAYERS,
+    JVM,
     PROTOCOL,
 
     USERS,
