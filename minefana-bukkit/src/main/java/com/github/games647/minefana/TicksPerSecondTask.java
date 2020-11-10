@@ -1,5 +1,7 @@
 package com.github.games647.minefana;
 
+import org.bukkit.Bukkit;
+
 /**
  * This task should run every second
  */
@@ -23,15 +25,15 @@ public class TicksPerSecondTask implements Runnable {
 
     @Override
     public void run() {
+
         //nanoTime is more accurate
         long currentTime = System.nanoTime();
-        long timeSpent = currentTime - lastCheck;
         //update the last check
         lastCheck = currentTime;
 
         //how many ticks passed since the last check * 1000 to convert to seconds
-        float tps = INTERVAL_CHECK * 20 * 1000.0F / (timeSpent / (1_000 * 1_000));
-        if (tps >= 0.0F && tps < 25.0F) {
+        float tps = TPS.getTPS();
+        if (tps >= 0.0F && tps <= 20.0F) {
             //Prevent all invalid values
             lastTicks = tps;
         }
