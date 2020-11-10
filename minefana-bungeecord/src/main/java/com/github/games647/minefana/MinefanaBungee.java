@@ -3,6 +3,7 @@ package com.github.games647.minefana;
 import com.github.games647.minefana.collectors.BungeePlayerCollector;
 import com.github.games647.minefana.common.AnalyticsCore;
 import com.github.games647.minefana.common.AnalyticsPlugin;
+import com.github.games647.minefana.common.collectors.JVMCollector;
 import com.github.games647.minefana.common.collectors.PingCollector;
 
 import java.nio.file.Path;
@@ -47,7 +48,9 @@ public class MinefanaBungee extends Plugin implements AnalyticsPlugin {
                 .stream()
                 .mapToInt(ProxiedPlayer::getPing)
                 .average().orElse(0));
+        Runnable jvmTask = new JVMCollector(core.getConnector());
         scheduler.schedule(this, pingTask, 2, 2, TimeUnit.SECONDS);
+        scheduler.schedule(this, jvmTask, 1,1, TimeUnit.SECONDS);
 
         playerCollector = new BungeePlayerCollector(core, this);
 

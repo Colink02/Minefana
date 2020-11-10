@@ -4,6 +4,7 @@ import com.github.games647.minefana.collectors.BukkitPlayerCollector;
 import com.github.games647.minefana.collectors.BukkitWorldCollector;
 import com.github.games647.minefana.common.AnalyticsCore;
 import com.github.games647.minefana.common.AnalyticsPlugin;
+import com.github.games647.minefana.common.collectors.JVMCollector;
 import com.github.games647.minefana.common.collectors.PingCollector;
 import com.github.games647.minefana.common.collectors.TpsCollector;
 
@@ -48,7 +49,9 @@ public class MinefanaBukkit extends JavaPlugin implements AnalyticsPlugin {
         scheduler.runTaskTimer(this, ticksTask, 60L, 1L);
 
         Runnable tpsCollector = new TpsCollector(core.getConnector(), ticksTask::getLastTicks);
+        Runnable JVMCollector = new JVMCollector(core.getConnector());
         scheduler.runTaskTimer(this, tpsCollector, 20L, 20L);
+        scheduler.runTaskTimer(this, JVMCollector, 10L, 10L);
 
         Runnable pingTask = new PingCollector(core.getConnector(), () -> Bukkit.getOnlinePlayers()
                 .stream()
@@ -57,7 +60,7 @@ public class MinefanaBukkit extends JavaPlugin implements AnalyticsPlugin {
                 .orElse(0));
         scheduler.runTaskTimer(this, pingTask, 40L, 40L);
 
-        scheduler.runTaskTimer(this, new BukkitWorldCollector(core.getConnector()), 5 * 60 * 20L, 5 * 60 * 20L);
+        scheduler.runTaskTimer(this, new BukkitWorldCollector(core.getConnector()), 5 * 20L, 5 * 20L);
 
         playerCollector = new BukkitPlayerCollector(core);
         scheduler.runTaskTimer(this, playerCollector, 15 * 60 * 20L, 15 * 60 * 20L);
